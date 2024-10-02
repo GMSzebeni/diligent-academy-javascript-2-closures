@@ -1,0 +1,1 @@
+# diligent-academy-javascript-2-closures
