@@ -1,6 +1,6 @@
-// Simple Closure
+//Simple closure
 
-function createCouter() {
+function createCounter() {
     let count = 0;
     return function () {
         count++;
@@ -8,29 +8,34 @@ function createCouter() {
     }
 }
 
-const counter = createCouter();
+const counter = createCounter();
+const counter2 = createCounter();
 
-//counter()
-//counter()
+// createCounter();
+// createCounter();
 
-// Private Variables
+// createCounter()();
+// createCounter()();
+
+// counter();
+// counter();
+
+// counter2();
+// counter2();
 
 function createPrivateCounter() {
     let count = 0;
     return {
-        increment: function () {
+        increment: function() {
             count++;
             console.log(count);
-
         }
     }
 }
 
-const counter2 = createPrivateCounter();
-//counter2.increment();
-//counter2.increment();
-
-// Delayed Execution
+const counter3 = createPrivateCounter();
+// counter3.increment();
+// counter3.increment();
 
 function delayMessage(message, delay) {
     return function () {
@@ -40,10 +45,8 @@ function delayMessage(message, delay) {
     }
 }
 
-const delayedGreeting = delayMessage('Hello World!', 2000);
-//delayedGreeting();
-
-// Memory and References
+const delayedGreating = delayMessage("Hello", 2000);
+delayedGreating;
 
 function createStorage() {
     const data = [];
@@ -53,19 +56,19 @@ function createStorage() {
     }
 }
 
-const storage = createStorage();
-/* storage.add('Borsó')
-storage.add('dog')
-console.log(storage.get()); */
+// függvény length - hány paramétert vár az adott függvénytől
 
-// Currying
+const storage = createStorage();
+storage.add("borsó");
+storage.add("répa");
+//console.log(storage.get());
 
 function curry(fn) {
     return function curried(...args) {
         if (args.length >= fn.length) {
             return fn(...args);
         } else {
-            return (...moreArgs) => curried(...args, ...moreArgs)
+            return (...moreArgs) => curried(...args, ...moreArgs);
         }
     }
 }
@@ -77,26 +80,29 @@ function sum(a, b) {
 const add5 = curry(sum)(5);
 //console.log(add5(3));
 
-// Modifiable Closures
+//Adjustable Closures
 
 function createCounter3() {
     let count = 0;
     return {
         increment: () => count++,
         decrement: () => count--,
-        getCount: () => count
+        get: () => count
     }
 }
 
-const counter3 = createCounter3();
-counter3.increment();
-counter3.decrement();
-//console.log(counter3.getCount());
+const counter4 = createCounter3();
+counter4.increment();
+//console.log(counter4.get());
+counter4.decrement();
+//console.log(counter4.get());
 
-// Recursive Closures
+//Recursive
 
 function fibonacci(n) {
-    if (n <= 1) return n;
+    if (n <= 1) {
+        return n;
+    }
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
@@ -114,23 +120,18 @@ const memoize = (fn) => {
 }
 
 const memoizedFibonacci = memoize(fibonacci);
-/* console.log(memoizedFibonacci(10));
-console.log(memoizedFibonacci(10));
-console.log(memoizedFibonacci(10)); */
+// console.log(memoizedFibonacci(10));
+// console.log(memoizedFibonacci(10));
+
+//hoising -- futtatáskor a javascriptben és a varral létrehozott változók előbb jönnek létre, mint hogy a függvények lefutnának
 
 
-function square(n) {
-    return n * n;
-}
-
-const memoizedSquare = memoize(square);
-//console.log(memoizedSquare(10));
-
+//logger dekorátor
 function logger(prefix) {
     return function (target) {
-        return function (...args) {
-            console.log(`${prefix}: ${target.name} called with args: ${args}`);
-            return target.apply(this, args);
+        return function(...args) {
+            console.log(`${prefix} : ${target.name} called with args: ${args}`);
+            return target.apply(this, args); //apply meghívja a függvényt
         }
     }
 }
@@ -139,11 +140,14 @@ function add(a, b) {
     return a + b;
 }
 
-const loggedAdd = logger('Add operation')(add);
+const loggedAdd = logger("Add operation")(add);
 
 const result = loggedAdd(3, 4);
+
 console.log(result);
 
-const loggedSquare = logger('Mamma mia')(square);
+// const loggedFibonacci = logger("mamma mia")();
 
-loggedSquare(33)
+// const result2 = loggedFibonacci;
+
+// console.log(result2);
