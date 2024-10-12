@@ -99,14 +99,65 @@ function echo(echo) {
     console.log(echo);
 }
 const myEcho = throttle(echo, 2000);
-myEcho("Du ");
-myEcho("Du hast ");
-myEcho("Du hast mich.");
+//myEcho("Du ");
+//myEcho("Du hast ");
+//myEcho("Du hast mich.");
 
 /*5. Promise handling:
 
 Create a `promisify` function that converts a callback-based function to a promise.
 Create an allSettled function that takes an array of promises and returns a new promise that resolves with an array containing the status of each promise.*/
+
+function promisify(fn) {
+    return (...args) => {
+        return new Promise((resolve, reject) => {
+            fn(...args, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            })
+        })
+    }
+}
+
+function allSettled(promises) {
+    return Promise.all(
+        promises.map(promise => 
+            promise
+            .then(value => ({ status: "success", value }))
+            .catch(error => ({ status: "rejected", error }))
+    ))
+}
+
+function getDataFromServer(success, callback) {
+    setTimeout(() => {
+        if (success) {
+            callback(null, "Data from server");
+        } else {
+            callback("Error: Failed to fetch data");
+        }
+    }, 1000);
+}
+
+/* const getDataFromServerPromise = promisify(getDataFromServer);
+
+getDataFromServerPromise(true)
+    .then(data => console.log("Success:", data))
+    .catch(error => console.log("Error:", error));
+
+getDataFromServerPromise(false)
+    .then(data => console.log("Success:", data))
+    .catch(error => console.log("Error:", error));
+ */
+const promise1 = new Promise((resolve) => setTimeout(() => resolve("Promise 1 resolved"), 500));
+const promise2 = new Promise((_, reject) => setTimeout(() => reject("Promise 2 rejected"), 1000));
+const promise3 = new Promise((resolve) => setTimeout(() => resolve("Promise 3 resolved"), 1500));
+    
+allSettled([promise1, promise2, promise3]).then(results => {
+    console.log(results);
+});
 
 /*6. Error handling:
 
